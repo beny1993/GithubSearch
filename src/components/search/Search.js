@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Pagination from "../pagination/Pagination";
+import LogOut from "../logout/LogOut";
+import Commits from "../commit/Commit";
 import Axios from "axios";
 
 export default function Search() {
@@ -13,6 +15,7 @@ export default function Search() {
     setOwner(e.target.value);
   };
 
+  // fetch data from api
   const onClickHandler = (e) => {
     e.preventDefault();
 
@@ -23,7 +26,6 @@ export default function Search() {
       Axios.get(`https://api.github.com/repos/${owner}/commits`)
         .then((res) => res.data)
         .then((data) => {
-          console.log(data);
           setData(data);
           setLoading(false);
         })
@@ -41,6 +43,7 @@ export default function Search() {
 
   return (
     <>
+      <LogOut />
       <div className="flex justify-center items-center w-auto mb-5 bg-gray-300 inline-block">
         <input
           className="rounded bg-gray-400 mr-3 w-64  shadow p-2"
@@ -57,29 +60,7 @@ export default function Search() {
           search
         </button>
       </div>
-      {loading ? (
-        <p>loading...</p>
-      ) : (
-        currentPosts.map((item, index) => {
-          return (
-            <div key={index} className="border-4  py-2 px-4 mx-4 border-black ">
-              <div className="flex items-center py-2">
-                <img
-                  className="w-10 h-10 rounded-full mr-4"
-                  src={item.author.avatar_url}
-                  alt="no avatar"
-                />
-                <div className="text-sm">
-                  <p className="text-gray-900 leading-none">
-                    {item.commit.author.name}
-                  </p>
-                  <p className="text-gray-600">{item.commit.message}</p>
-                </div>
-              </div>
-            </div>
-          );
-        })
-      )}
+      <Commits currentPosts={currentPosts} loading={loading} />
       <Pagination
         postsPerPage={postsPerPage}
         totalPosts={data.length}

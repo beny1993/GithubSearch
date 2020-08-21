@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useAlert } from "react-alert";
 
 export default function Password(props) {
   const [password, setPassword] = useState("");
+  const alert = useAlert();
 
   function onChangeHandler(e) {
     e.preventDefault();
@@ -14,7 +16,8 @@ export default function Password(props) {
     if (password === pass) {
       return props.history.push("/search");
     } else {
-      alert("wrong user pass");
+      alert.error("wrong user pass");
+      setPassword("");
     }
   }
 
